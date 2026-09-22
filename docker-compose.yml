@@ -1,0 +1,54 @@
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: ecodetect-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: garbage_detection
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  ai:
+    build:
+      context: ./ai-model
+    container_name: ecodetect-ai
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+
+  backend:
+    build:
+      context: ./garbage-detection
+    container_name: ecodetect-backend
+    restart: unless-stopped
+    depends_on:
+      - mysql
+      - ai
+    environment:
+      DB_USERNAME: root
+      DB_PASSWORD: ${DB_PASSWORD}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      ADMIN_MOBILE: ${ADMIN_MOBILE}
+    ports:
+      - "8080:8080"
+    volumes:
+      - uploads:/app/uploads
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: ecodetect-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+
+volumes:
+  mysql-data:
+  uploads:

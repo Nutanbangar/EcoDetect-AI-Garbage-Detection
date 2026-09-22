@@ -1,0 +1,47 @@
+
+# Environment files
+.env
+frontend/.env
+
+# SSL certificates / private keys
+frontend/ssl/
+*.key
+*.pem
+
+# Python
+ai-model/ai-env/
+ai-model/__pycache__/
+*.pyc
+
+# Python model/cache
+*.h5
+ai-model/verification_model_backup.keras
+
+# Java / Maven
+garbage-detection/target/
+*.class
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# Uploads
+garbage-detection/uploads/
+
+# Database backups
+*.sql
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker secrets
+docker.env
+
+# Training datasets
+AI_Verification_Dataset/
+dataset-resized/
